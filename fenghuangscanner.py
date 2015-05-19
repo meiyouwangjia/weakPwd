@@ -1,4 +1,4 @@
-﻿#coding=utf-8
+#coding=utf-8
 __author__ = 'wilson'
 import ctypes,sys
 import argparse
@@ -277,6 +277,18 @@ def pinger():
                     lock.release()
             except:pass
 
+        if platform.system()=='Darwin':
+            import commands
+            p=commands.getstatusoutput("ping -c 2 "+ip)
+            m = re.findall('ttl', p[1])
+            try:
+                if m:
+                    pinglist.append(ip)
+                    lock.acquire()
+                    printRed("%s is live!!\r\n" % ip)
+                    lock.release()
+            except:pass
+
         if platform.system()=='Windows':
             p=Popen('ping -n 2 ' + ip, stdout=PIPE)
             m = re.findall('TTL', p.stdout.read())
@@ -471,6 +483,8 @@ if __name__ == '__main__':
         for ip in ipdict['Unknown']:
             if str(ip).split(':')[1]=='389':
                 ipdict['ldap'].append(ip)
+            if str(ip).split(':')[1]=='445':
+                ipdict['smb'].append(ip)
             if str(ip).split(':')[1] in ['3306','3307','3308','3309']:
                 ipdict['mysql'].append(ip)
             if str(ip).split(':')[1]=='1433':
