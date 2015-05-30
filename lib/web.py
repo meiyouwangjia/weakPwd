@@ -128,28 +128,30 @@ def iis_put_scanner(ip,port):
             header={'X-FORWARDED-FOR': '61.135.169.121', 'Referer': 'http://www.baidu.com','User-Agent':'baidupaida'}
             d=open('conf/dir.conf','r')
             data=d.readline().strip('\r\n')
+            url404="http://%s:%s/Iamstall404hahah" %(ip,port)
+            #print url404
+            re=requests.get(url404,headers=header,verify=False,timeout=10)
+            conten404=re.content
             while(data):
-#                startime=time.ctime()
-                url='http://'+ip+':'+str(port)+'/'+data
+                url="http://%s:%s/%s" %(ip,port,data)
+                #print url
                 url=my_urlencode(url)
-                r=requests.get(url,headers=header,timeout=10)
-                if r.status_code in [200]:
-                    m1=re.search("(.*)404(.*)",r.content)
-                    m2=re.search("(.*)not find(.*)",r.content,re.IGNORECASE)
-                    if m1==None:
-                        if m2==None:
-                            lock.acquire()
-                            print '%s  is ok' %url
-                            lock.release()
-                            result.append('%s  is exist\r' %url)
-                            url200.append(url)
-#                endtime=time.ctime()
-#                time=endtime-startime
+                r=requests.get(url,headers=header,verify=False,timeout=10)
+                if r.status_code ==200:
+                    if r.content ==conten404:
+                        pass
+                    else:
+                        lock.acquire()
+                        print '%s  is exist' %url
+                        lock.release()
+                        url200.append(url)
+                        result.append('%s  is exist\r' %url)
                 data=d.readline().strip('\r\n')
             result.append('\n')
         except Exception,e:
-            print e
             pass
+
+
 
 
         #sturt2 test
