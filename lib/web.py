@@ -132,10 +132,12 @@ def iis_put_scanner(ip,port):
             #print url404
             re=requests.get(url404,headers=header,verify=False,timeout=10)
             conten404=re.content
+            re.close()
             while(data):
                 url="http://%s:%s/%s" %(ip,port,data)
                 #print url
                 url=my_urlencode(url)
+                #print url
                 r=requests.get(url,headers=header,verify=False,timeout=10)
                 if r.status_code ==200:
                     if r.content ==conten404:
@@ -146,9 +148,11 @@ def iis_put_scanner(ip,port):
                         lock.release()
                         url200.append(url)
                         result.append('%s  is exist\r' %url)
+                    r.close()
                 data=d.readline().strip('\r\n')
             result.append('\n')
         except Exception,e:
+            print e
             pass
 
 
