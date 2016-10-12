@@ -1,5 +1,6 @@
 # fenghuangscanner_v2   
-####usage: fenghuangscanner.py [-h] --ip IP [--f PATH] [--threads THREADS] [--P ISPING] [--p USER_PORTS]
+####wilson@wilson-2:python fenghuangscanner.py -h
+    --ip IP [--f PATH] [--threads THREADS] [--P ISPING] [--p USER_PORTS]
     ports&*weak password scanner. teams:xdsec. author: wilson
     optional arguments:
             -h, --help         show this help message and exit
